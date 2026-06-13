@@ -1,9 +1,9 @@
-name: Auto Green Grass
+name: Auto Green Grass (Random)
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 매일 한국 시간 오전 9시에 자동으로 작동합니다.
-  workflow_dispatch: # 원할 때 수동으로도 켤 수 있게 하는 버튼입니다.
+    - cron: '0 3 * * *' # 매일 한국 시간 낮 12시 0분에 봇이 작동을 시작합니다.
+  workflow_dispatch: # 수동 버튼
 
 jobs:
   build:
@@ -12,6 +12,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       
+    - name: Wait Random Time (매일 랜덤하게 기다리기)
+      run: |
+        # 1초부터 18000초(5시간) 사이의 랜덤한 숫자를 뽑습니다.
+        RANDOM_DELAY=$((1 + RANDOM % 18000))
+        echo "오늘은 $RANDOM_DELAY 초 후에 출석체크를 합니다."
+        # 그 시간만큼 가만히 대기합니다.
+        sleep $RANDOM_DELAY
+        
     - name: Update README
       run: |
         echo "마지막 출석 체크 시간: $(date)" > README.md
